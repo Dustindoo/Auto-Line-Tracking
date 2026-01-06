@@ -1,3 +1,5 @@
 Flask
-qrcode[pil]
+pandas
+openpyxl
+qrcode
 gunicorn
