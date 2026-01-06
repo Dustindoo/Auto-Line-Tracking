@@ -1,12 +1,14 @@
 import pandas as pd
 import os
 from flask import Flask, render_template_string, request, redirect, url_for, send_file
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 import qrcode
 import io
 import datetime
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
 # Create an 'uploads' directory if it doesn't exist
 if not os.path.exists('uploads'):
@@ -158,7 +160,7 @@ def generate_qr(task_id):
     if task_id not in tasks:
         return "Task not found", 404
     
-    confirm_url = f"https://{request.host}{url_for('confirm_task', task_id=task_id)}"
+    confirm_url = url_for('confirm_task', task_id=task_id, _external=True)
     
     img = qrcode.make(confirm_url)
     buf = io.BytesIO()
