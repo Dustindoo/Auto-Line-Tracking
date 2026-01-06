@@ -158,7 +158,7 @@ def generate_qr(task_id):
     if task_id not in tasks:
         return "Task not found", 404
     
-    confirm_url = request.host_url + f"confirm/{task_id}"
+    confirm_url = f"https://{request.host}{url_for('confirm_task', task_id=task_id)}"
     
     img = qrcode.make(confirm_url)
     buf = io.BytesIO()
